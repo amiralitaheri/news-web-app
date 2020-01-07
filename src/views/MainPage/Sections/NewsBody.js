@@ -17,6 +17,14 @@ import {withStyles} from "@material-ui/core";
 
 
 class NewsBody extends React.Component {
+    onSelectSortOption = (sortBy) => {
+        console.log(this.state)
+        console.log(sortBy)
+        this.setState({
+            sortBy: sortBy
+        })
+    }
+
     constructor() {
         super();
         this.state = {
@@ -43,8 +51,8 @@ class NewsBody extends React.Component {
         return (
             <div className={classes.container}>
                 <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
-                        <SearchBar/>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <SearchBar onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
                     </GridItem>
                     <GridItem xs={12} sm={12} md={12}>
                         <Categories/>

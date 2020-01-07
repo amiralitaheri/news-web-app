@@ -2,10 +2,12 @@ import React from "react";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const ViewNumber = (props) => {
-    return (<div>
+    return (
+        <div>
         <VisibilityIcon style={{color: "grey", fontSize: 10}}/>
         {props.number}
-    </div>)
+    </div>
+    )
 };
 
 export default ViewNumber;
