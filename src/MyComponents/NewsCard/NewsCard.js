@@ -4,6 +4,7 @@ import CardBody from "../../components/Card/CardBody";
 import Badge from "../../components/Badge/Badge";
 import Favorite from '@material-ui/icons/Favorite';
 import Button from '../../components/CustomButtons/Button';
+import ViewNumber from '../../MyComponents/ViewNumber'
 
 const NewsCard = ({news}) => {
     return (
@@ -13,9 +14,14 @@ const NewsCard = ({news}) => {
                     <a href={news["link"]}><h3>{news["headline"]}</h3></a>
                     <p>{news["short_description"]}</p>
                     <p><small>authors: {news["authors"]}</small></p>
-                    <Badge>{news["category"]}</Badge>
+                    <div style={{height: "fit-content", margin: "7px"}}><Badge>{news["category"]}</Badge></div>
+                    <div style={{display: "flex"}}>
 
-                    <Button round color="rose" size={"sm"}><Favorite style={{color: "#FFFFFF"}}/>{news["likeNumber"]}</Button>
+
+                        <div style={{height: "fit-content", margin: "7px", paddingRight:"4px", border:"2px solid #808080", borderRadius: "25px", padding:"4px"}}><ViewNumber number={news["views"]}/></div>
+                        <Button round color="rose" size={"sm"}><Favorite
+                            style={{color: "#FFFFFF"}}/>{news["likeNumber"]}</Button>
+                    </div>
                 </CardBody>
             </Card>
         </div>

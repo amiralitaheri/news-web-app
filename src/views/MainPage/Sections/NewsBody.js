@@ -9,6 +9,7 @@ import GridItem from "../../../components/Grid/GridItem";
 import SearchBar from "../../../MyComponents/SearchBar/SearchBar";
 import Categories from "../../../MyComponents/Categories/Categories";
 import NewsCard from "../../../MyComponents/NewsCard/NewsCard";
+import Scroll from "../../../MyComponents/Scroll";
 
 
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
@@ -24,11 +25,11 @@ class NewsBody extends React.Component {
             news: [
                 {
                     "category": 'WELLNESS',
-                    "headline": "this is the news head line!!",
-                    "authors": "amirali",
-                    "link": "https://www.google.com",
-                    "short_description": "Lorm Esdsadasfsafsafaesfjsavjdiosadvlasjd;lsavdvdwvasdvsad",
-                    "date": "2019",
+                    "headline": "Roadmap for the Work Week",
+                    "authors": "Rupa Mehta, Contributor\\nFounder of Nalini Method, NaliniKIDS and author of \\The Nalini...",
+                    "link": "https://www.huffingtonpost.com/entry/success-and-motivation_us_5b9d8bd1e4b03a1dcc8960d3",
+                    "short_description": "Any good roadmap has structure and suggestions, but that doesn't mean you can't choose to detour. What's important is to accept each day for what it is and to be present in it. Choose to be the best you can be in the moment.",
+                    "date": "2013-09-30",
                     "likeNumber": 21,
                     "views": 1000
                 }
@@ -48,10 +49,16 @@ class NewsBody extends React.Component {
                     <GridItem xs={12} sm={12} md={12}>
                         <Categories/>
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={12}>
-                        <NewsCard news={this.state.news[0]}/>
-                        <NewsCard news={this.state.news[0]}/>
-                    </GridItem>
+                    <Scroll>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <NewsCard news={this.state.news[0]}/>
+                            <NewsCard news={this.state.news[0]}/>
+                            <NewsCard news={this.state.news[0]}/>
+                            <NewsCard news={this.state.news[0]}/>
+                            <NewsCard news={this.state.news[0]}/>
+                            <NewsCard news={this.state.news[0]}/>
+                        </GridItem>
+                    </Scroll>
                 </GridContainer>
             </div>
         )
