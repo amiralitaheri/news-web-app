@@ -5,9 +5,14 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import DropDown from "../DropDown";
 
 const SearchBar = (props) => {
-
+    const keyPress = (e) => {
+        const value = e.target.value;
+        if (value.charAt(value.length - 1) === ' ') {
+            props.onQueryChange(value);
+        }
+    };
     return (
-        <div style={{paddingTop: "65px", display: "flex"}}>
+        <div style={{paddingTop: "65px", display: "flex" , alignItems: "center", justifyContent: "center"}}>
             <div style={{flexGrow: 4}}>
                 <CustomInput
                     labelText="Search"
@@ -20,7 +25,8 @@ const SearchBar = (props) => {
                             <InputAdornment position="end">
                                 <SearchIcon/>
                             </InputAdornment>
-                        )
+                        ),
+                        onChange: (e) => keyPress(e)
                     }}
                 />
             </div>
@@ -31,6 +37,6 @@ const SearchBar = (props) => {
 
     )
 
-}
+};
 
 export default SearchBar;

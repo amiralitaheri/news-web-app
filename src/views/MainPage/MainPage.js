@@ -33,7 +33,7 @@ class MainPage extends React.Component {
     render() {
 
         return (
-            <div>
+            <div style={{display:"flex", flexDirection:"column", justifyContent:"space-between", alignItems:"center"}}>
                 <Header
                     brand={"Simple News"}
                     fixed={true}
