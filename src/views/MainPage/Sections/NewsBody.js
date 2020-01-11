@@ -199,34 +199,38 @@ class NewsBody extends React.Component {
                                        onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
-                            <Categories/>
+                            <Categories categories={this.state.selectedCategories}
+                                        onSelectCategory={this.onCategoryChange}/>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
-                            <InfiniteScroll
-                                pageStart={0}
-                                loadMore={this.getNews.bind(this)}
-                                hasMore={this.state.hasMore}
-                                loader={
-                                    <div key={0} style={{
-                                        display: "flex",
-                                        paddingTop: "100px",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        justifyContent: "center"
-                                    }}>
-                                        <h2>loading...</h2>
-                                        <div>
-                                            <CircleLoader
-                                                size={300}
-                                                color={"#123abc"}
-                                                loading={this.state.loading}
-                                            />
+                            <div style={{"height": "550px", "overflowY": "auto"}}>
+                                <InfiniteScroll
+                                    pageStart={0}
+                                    loadMore={this.getNews.bind(this)}
+                                    hasMore={this.state.hasMore}
+                                    useWindow={false}
+                                    loader={
+                                        <div key={0} style={{
+                                            display: "flex",
+                                            paddingTop: "100px",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}>
+                                            <h2 style={{"color": "#808080"}}>loading...</h2>
+                                            <div>
+                                                <CircleLoader
+                                                    size={300}
+                                                    color={"#32a8a6"}
+                                                    loading={this.state.loading}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                            >
-                                {items}
-                            </InfiniteScroll>
+                                    }
+                                >
+                                    {items}
+                                </InfiniteScroll>
+                            </div>
                         </GridItem>
                     </GridContainer>
                 </div>
