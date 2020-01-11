@@ -11,7 +11,6 @@ import CircleLoader from "react-spinners/CircleLoader"
 import SearchBar from "../../../MyComponents/SearchBar/SearchBar";
 import Categories from "../../../MyComponents/Categories/Categories";
 import NewsCard from "../../../MyComponents/NewsCard/NewsCard";
-import Scroll from "../../../MyComponents/Scroll";
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -73,24 +72,28 @@ class NewsBody extends React.Component {
             case "Views":
                 sortedNews = this.state.news.sort(sortViews);
                 break;
+            case "Search":
+                sortedNews = this.state.originalNews;
+                break;
         }
         this.setState({
             sortBy: sortBy,
             news: sortedNews
         });
-        console.log(sortBy);
-        console.log(sortedNews)
     };
 
     onQueryChange = (value) => {
+        console.log(value);
         this.setState({
             searchText: value,
-            news: []
+            news: [],
+            originalNews: [],
+            hasMore: true
         });
-        this.getNews(0);
     };
 
     getNews = (pageNumber) => {
+        let tempOriNews = this.state.originalNews;
         let tempNews = this.state.news;
         fetch("http://127.0.0.1:9000/getNews?page=" + pageNumber, {
             method: 'post',
@@ -98,19 +101,42 @@ class NewsBody extends React.Component {
             body: JSON.stringify({"searchQuery": this.state.searchText, "categories": this.state.selectedCategories}),
         }).then((response) => {
             response.json().then(fetchedNews => {
+                let count = 0;
                 fetchedNews.map((news) => {
-                    tempNews.push(<NewsCard key={news["id"]} news={news}/>);
+                    tempNews.push(news);
+                    tempOriNews.push(news);
+                    count++;
                 });
                 console.log(tempNews);
-                console.log(this);
-                this.setState({
-                    news: tempNews,
-                    isLoading: false
-                });
+                if (count === 0) {
+                    this.setState({
+                        news: tempNews,
+                        isLoading: false,
+                        hasMore: false
+                    })
+                } else {
+                    this.setState({
+                        news: tempNews,
+                        isLoading: false
+                    });
+                }
+
             });
 
         });
 
+    };
+
+    onCategoryChange = (selectedCategories) => {
+        this.setState(
+            {
+                selectedCategories: selectedCategories,
+                news: [],
+                originalNews: [],
+                hasMore: true,
+                isLoading: true
+            }
+        )
     };
 
     constructor() {
@@ -120,118 +146,93 @@ class NewsBody extends React.Component {
             isLoading: true,
             searchText: "",
             news: [],
-            // news: [
-            //     {
-            //         "id": 1
-            //         "category": 'WELLNESS',
-            //         "headline": "Roadmap for the Work Week",
-            //         "authors": "Rupa Mehta, Contributor\\nFounder of Nalini Method, NaliniKIDS and author of \\The Nalini...",
-            //         "link": "https://www.huffingtonpost.com/entry/success-and-motivation_us_5b9d8bd1e4b03a1dcc8960d3",
-            //         "short_description": "Any good roadmap has structure and suggestions, but that doesn't mean you can't choose to detour. What's important is to accept each day for what it is and to be present in it. Choose to be the best you can be in the moment.",
-            //         "date": "2013-09-30",
-            //         "likeNumber": 21,
-            //         "views": 1000
-            //     },
-            //     {
-            //         "id": 2
-            //         "category": 'Sport',
-            //         "headline": "Aootball is good!!",
-            //         "authors": "Rupa Mehta, Contributor\\nFounder of Nalini Method, NaliniKIDS and author of \\The Nalini...",
-            //         "link": "https://www.huffingtonpost.com/entry/success-and-motivation_us_5b9d8bd1e4b03a1dcc8960d3",
-            //         "short_description": "Any good roadmap has structure and suggestions, but that doesn't mean you can't choose to detour. What's important is to accept each day for what it is and to be present in it. Choose to be the best you can be in the moment.",
-            //         "date": "2013-06-30",
-            //         "likeNumber": 52,
-            //         "views": 900
-            //     }
-            // ],
-            sortBy: "Date"
+            originalNews: [],
+            hasMore: true,
+            sortBy: "Most Relevant"
         };
         this.newsCards = [];
-        this.getNews(0);
     }
 
 
     render() {
+        let items = [];
+        this.state.news.map((news, i) => {
+            items.push(
+                <div key={news["id"]}>
+                    <NewsCard news={news}/>
+                </div>
+            )
+        });
         const {classes} = this.props;
-        if (this.state.isLoading) {
+
+        let count = 0;
+        this.state.news.forEach(() => {
+            count++;
+        });
+        console.log(count);
+        if (false) {
             return (
-                <GridItem xs={12} sm={12} md={12}>
-                    <div style={{
-                        display: "flex",
-                        paddingTop: "100px",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center"
-                    }}>
-                        <h2>loading...</h2>
-                        <div>
-                            <CircleLoader
-                                size={300}
-                                color={"#123abc"}
-                                loading={this.state.loading}
-                            />
-                        </div>
-                    </div>
-                </GridItem>
+                <div className={classes.container}>
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <SearchBar onQueryChange={this.onQueryChange}
+                                       onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <Categories categories={this.state.selectedCategories}
+                                        onSelectCategory={this.onCategoryChange}/>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                <h1>No News Found!!!</h1>
+                            </div>
+                        </GridItem>
+                    </GridContainer>
+                </div>
             )
         } else {
-            let count = 0;
-            this.state.news.forEach(() => {
-                count++;
-            });
-            console.log(count);
-            if (count === 0) {
-                return (
-                    <div className={classes.container}>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={12}>
-                                <SearchBar onQueryChange={this.onQueryChange}
-                                           onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12}>
-                                <Categories/>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12}>
-                                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                                    <h1>No News Found!!!</h1>
-                                </div>
-                            </GridItem>
-                        </GridContainer>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className={classes.container}>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={12}>
-                                <SearchBar onQueryChange={this.onQueryChange}
-                                           onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12}>
-                                <Categories/>
-                            </GridItem>
+            return (
+                <div className={classes.container}>
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <SearchBar onQueryChange={this.onQueryChange}
+                                       onSelectSortOption={this.onSelectSortOption} sortBy={this.state.sortBy}/>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12}>
+                            <Categories/>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12}>
                             <InfiniteScroll
-                                pageStart={1}
-                                loadMore={this.getNews}
-                                hasMore={true}
-                                loader={<div className="loader" key={0}>Loading ...</div>}
+                                pageStart={0}
+                                loadMore={this.getNews.bind(this)}
+                                hasMore={this.state.hasMore}
+                                loader={
+                                    <div key={0} style={{
+                                        display: "flex",
+                                        paddingTop: "100px",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        justifyContent: "center"
+                                    }}>
+                                        <h2>loading...</h2>
+                                        <div>
+                                            <CircleLoader
+                                                size={300}
+                                                color={"#123abc"}
+                                                loading={this.state.loading}
+                                            />
+                                        </div>
+                                    </div>
+                                }
                             >
-                                <GridItem xs={12} sm={12} md={12}>
-                                    {this.newsCards}
-                                </GridItem>
+                                {items}
                             </InfiniteScroll>
-                            {/*<Scroll>*/}
-                            {/*    <GridItem xs={12} sm={12} md={12}>*/}
-                            {/*        {this.state.news.map((n, i) => {*/}
-                            {/*            return <NewsCard key={i} news={n}/>*/}
-                            {/*        })}*/}
-                            {/*    </GridItem>*/}
-                            {/*</Scroll>*/}
-                        </GridContainer>
-                    </div>
-                )
-            }
+                        </GridItem>
+                    </GridContainer>
+                </div>
+            )
         }
+
 
     }
 }

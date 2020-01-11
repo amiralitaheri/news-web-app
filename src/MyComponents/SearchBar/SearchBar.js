@@ -3,17 +3,16 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from '@material-ui/icons/Search';
 import CustomInput from "../../components/CustomInput/CustomInput";
 import DropDown from "../DropDown";
+import Button from "../../components/CustomButtons/Button";
 
 const SearchBar = (props) => {
+    let v = "";
     const keyPress = (e) => {
-        const value = e.target.value;
-        if (value.charAt(value.length - 1) === ' ') {
-            props.onQueryChange(value);
-        }
+        v = e.target.value;
     };
     return (
-        <div style={{paddingTop: "65px", display: "flex" , alignItems: "center", justifyContent: "center"}}>
-            <div style={{flexGrow: 4}}>
+        <div style={{paddingTop: "65px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <div style={{flexGrow: 6}}>
                 <CustomInput
                     labelText="Search"
                     id="material"
@@ -29,6 +28,13 @@ const SearchBar = (props) => {
                         onChange: (e) => keyPress(e)
                     }}
                 />
+            </div>
+            <div style={{flexGrow: 1, padding: "15px"}}>
+                <div onClick={() => {
+                    props.onQueryChange(v)
+                }}>
+                    <Button type="button" color="info" round>Search</Button>
+                </div>
             </div>
             <div style={{flexGrow: 1, padding: "15px"}}>
                 <DropDown onSelectOption={props.onSelectSortOption} sortBy={props.sortBy}/>

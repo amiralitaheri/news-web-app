@@ -11,6 +11,7 @@ const NewsCard = ({news}) => {
         <div>
             <Card>
                 <CardBody>
+                    {console.log(news)}
                     <a href={news["link"]}><h3>{news["headline"]}</h3></a>
                     <p>{news["short_description"]}</p>
                     <p><small>authors: {news["authors"]}</small></p>
@@ -20,7 +21,7 @@ const NewsCard = ({news}) => {
 
                         <div style={{height: "fit-content", margin: "7px", paddingRight:"4px", border:"2px solid #808080", borderRadius: "25px", padding:"4px"}}><ViewNumber number={news["views"]}/></div>
                         <Button round color="rose" size={"sm"}><Favorite
-                            style={{color: "#FFFFFF"}}/>{news["likeNumber"]}</Button>
+                            style={{color: "#FFFFFF"}}/>{news["likes"]}</Button>
                     </div>
                 </CardBody>
             </Card>

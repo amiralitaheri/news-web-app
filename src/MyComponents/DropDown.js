@@ -7,6 +7,9 @@ const DropDown = ({sortBy, onSelectOption}) => {
             buttonText={sortBy}
             dropdownList={[
                 <p color="default" onClick={() => {
+                    onSelectOption("Search")
+                }}>Most Relevant</p>,
+                <p color="default" onClick={() => {
                     onSelectOption("Date")
                 }}>Sort By Date</p>,
                 <p color="default" onClick={() => {
