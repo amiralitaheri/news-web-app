@@ -11,7 +11,13 @@ const SearchBar = (props) => {
         v = e.target.value;
     };
     return (
-        <div style={{paddingTop: "65px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <div style={{
+            paddingTop: "65px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap"
+        }}>
             <div style={{flexGrow: 6}}>
                 <CustomInput
                     labelText="Search"
@@ -29,14 +35,14 @@ const SearchBar = (props) => {
                     }}
                 />
             </div>
-            <div style={{flexGrow: 1, padding: "15px"}}>
+            <div style={{flexGrow: 0, padding: "15px"}}>
                 <div onClick={() => {
                     props.onQueryChange(v)
                 }}>
                     <Button type="button" color="info" round>Search</Button>
                 </div>
             </div>
-            <div style={{flexGrow: 1, padding: "15px"}}>
+            <div style={{flexGrow: 0, padding: "15px"}}>
                 <DropDown onSelectOption={props.onSelectSortOption} sortBy={props.sortBy}/>
             </div>
         </div>

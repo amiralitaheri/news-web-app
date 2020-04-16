@@ -3,6 +3,7 @@ import Badge from '../../components/Badge/Badge.js';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
+
 class Categories extends React.Component {
     cat = ["RELIGION", "QUEER VOICES", "CRIME", "FIFTY", "DIVORCE", "WORLDPOST", "HOME & LIVING", "CULTURE & ARTS", "FOOD & DRINK", "TASTE", "GOOD NEWS", "WOMEN", "PARENTS", "WORLD NEWS", "LATINO VOICES", "ENTERTAINMENT", "WEIRD NEWS", "MEDIA", "EDUCATION", "WEDDINGS", "TECH", "TRAVEL", "IMPACT", "ENVIRONMENT", "BLACK VOICES", "SPORTS", "HEALTHY LIVING", "MONEY", "POLITICS", "COMEDY", "ARTS & CULTURE", "SCIENCE", "BUSINESS", "STYLE", "ARTS", "COLLEGE", "WELLNESS", "STYLE & BEAUTY", "PARENTING", "GREEN", "THE WORLDPOST"];
 
@@ -45,25 +46,27 @@ class Categories extends React.Component {
 
     render() {
         return (
-            <div style={{"display": "flex", "overflowX": "auto"}}>
-                {
-                    this.cat.map(
-                        (name, i) => {
-                            let color = "";
-                            if (this.state.isSelected[name]) {
-                                color = "info"
-                            } else {
-                                color = "gray"
+            <SimpleBar autoHide={false}>
+                <div style={{"display": "flex", "padding": "20px"}}>
+                    {
+                        this.cat.map(
+                            (name, i) => {
+                                let color;
+                                if (this.state.isSelected[name]) {
+                                    color = "info"
+                                } else {
+                                    color = "gray"
+                                }
+                                return (
+                                    <div key={i} onClick={() => this.onClickBadge(name)} style={{cursor: "pointer"}}>
+                                        <Badge color={color}>{name}</Badge>
+                                    </div>
+                                )
                             }
-                            return (
-                                <div key={i} onClick={() => this.onClickBadge(name)}>
-                                    <Badge color={color}>{name}</Badge>
-                                </div>
-                            )
-                        }
-                    )
-                }
-            </div>
+                        )
+                    }
+                </div>
+            </SimpleBar>
 
         )
     }

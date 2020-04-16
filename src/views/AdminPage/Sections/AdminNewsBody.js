@@ -7,7 +7,7 @@ import CircleLoader from "react-spinners/CircleLoader"
 
 import SearchBar from "../../../MyComponents/SearchBar/SearchBar";
 import Categories from "../../../MyComponents/Categories/Categories";
-import NewsCard from "../../../MyComponents/NewsCard/NewsCard";
+import AdminNewsCard from "../../../MyComponents/NewsCard/AdminNewsCard";
 
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -16,11 +16,83 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 import {withStyles} from "@material-ui/core";
 
 
+class AdminNewsBody extends React.Component {
 
-
-class NewsBody extends React.Component {
+    deleteNews = (docId) => {
+        fetch("http://localhost:9000/deleteNews?docId=" + docId + "&token=a66abb5684c45962d887564f08346e8d", {
+            method: 'post',
+            mode: 'cors'
+        }).then(response => {
+                response.json().then(responseJson => {
+                    console.log(responseJson);
+                    if (responseJson["result"] === "true") {
+                        this.setState({
+                            news: [],
+                            hasMore: true,
+                            pageStart: -1,
+                            scrollerKey: this.state.scrollerKey + 1
+                        })
+                    }
+                })
+            }
+        )
+    };
 
     onSelectSortOption = (sortBy) => {
+        // const sortHeadline = (a, b) => {
+        //     if (a['headline'] > b['headline']) {
+        //         return 1;
+        //     } else if (a['headline'] < b['headline']) {
+        //         return -1;
+        //     } else {
+        //         return 0;
+        //     }
+        // };
+        // const sortLikeNumber = (a, b) => {
+        //     if (a['likeNumber'] > b['likeNumber']) {
+        //         return -1;
+        //     } else if (a['likeNumber'] < b['likeNumber']) {
+        //         return 1;
+        //     } else {
+        //         return 0;
+        //     }
+        // };
+        // const sortViews = (a, b) => {
+        //     if (a['views'] > b['views']) {
+        //         return -1;
+        //     } else if (a['views'] < b['views']) {
+        //         return 1;
+        //     } else {
+        //         return 0;
+        //     }
+        // };
+        // const sortDate = (a, b) => {
+        //     if (a['date'] > b['date']) {
+        //         return 1;
+        //     } else if (a['date'] < b['date']) {
+        //         return -1;
+        //     } else {
+        //         return 0;
+        //     }
+        // };
+        // let sortedNews = [];
+        // switch (sortBy) {
+        //     case "Date":
+        //         sortedNews = this.state.news.sort(sortDate);
+        //         break;
+        //     case "Title":
+        //         sortedNews = this.state.news.sort(sortHeadline);
+        //         break;
+        //     case "Likes":
+        //         sortedNews = this.state.news.sort(sortLikeNumber);
+        //         break;
+        //     case "Views":
+        //         sortedNews = this.state.news.sort(sortViews);
+        //         break;
+        //     case "Search":
+        //         sortedNews = this.state.originalNews;
+        //         break;
+        // }
         this.setState({
             sortBy: sortBy,
             news: [],
@@ -117,7 +189,7 @@ class NewsBody extends React.Component {
         this.state.news.map((news) => {
             items.push(
                 <div key={news["id"]}>
-                    <NewsCard news={news}/>
+                    <AdminNewsCard news={news} onDelete={this.deleteNews}/>
                 </div>
             )
         });
@@ -178,4 +250,4 @@ class NewsBody extends React.Component {
 
 }
 
-export default withStyles(styles, {withTheme: true})(NewsBody);
+export default withStyles(styles, {withTheme: true})(AdminNewsBody);
